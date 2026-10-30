@@ -53,7 +53,7 @@ class _OverviewScreenState extends ConsumerState<OverviewScreen> {
             ),
             const SizedBox(width: 10),
             const Text(
-              'Spicci',
+              'SpicciTrack',
               style: TextStyle(
                 fontWeight: FontWeight.w800,
                 fontSize: 22,

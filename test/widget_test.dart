@@ -16,6 +16,6 @@ void main() {
     );
 
     // Verifica che il titolo dell'app sia presente
-    expect(find.text('Spicci'), findsOneWidget);
+    expect(find.text('SpicciTrack'), findsOneWidget);
   });
 }

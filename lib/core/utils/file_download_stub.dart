@@ -12,7 +12,7 @@ Future<String?> saveCsvFile(String content, String fileName) async {
     // 1. Prova prima con il selettore di salvataggio nativo del sistema
     try {
       final uri = await FilePicker.saveFile(
-        dialogTitle: 'Salva esportazione Spicci CSV',
+        dialogTitle: 'Salva esportazione SpicciTrack CSV',
         fileName: fileName,
         bytes: bytes,
         mimeType: 'text/csv',

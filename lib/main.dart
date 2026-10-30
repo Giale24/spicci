@@ -17,13 +17,13 @@ void main() async {
 
   runApp(
     const ProviderScope(
-      child: SpicciApp(),
+      child: SpicciTrackApp(),
     ),
   );
 }
 
-class SpicciApp extends ConsumerWidget {
-  const SpicciApp({super.key});
+class SpicciTrackApp extends ConsumerWidget {
+  const SpicciTrackApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,10 +31,12 @@ class SpicciApp extends ConsumerWidget {
 
     return MaterialApp(
       key: ValueKey(activePalette.id),
-      title: 'Spicci',
+      title: 'SpicciTrack',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.themeFor(activePalette),
       home: const MainNavigationScreen(),
     );
   }
 }
+
+typedef SpicciApp = SpicciTrackApp;

@@ -44,7 +44,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
     _TutorialSlide(
       icon: Icons.monetization_on_rounded,
       iconColor: AppColors.goldCoin,
-      title: 'Benvenuto in Spicci!',
+      title: 'Benvenuto in SpicciTrack!',
       subtitle: 'Segna le spese in un lampo',
       description:
           'Progettato per chi odia le app lente. Registri qualsiasi spesa in meno di 3 secondi, 100% offline e privato sul tuo telefono.',
@@ -71,7 +71,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
       title: 'Calcolatrice Dividi Conto',
       subtitle: 'Tasto ÷ per cene e uscite',
       description:
-          'Conto da 80€ diviso tra 4 amici? Digiti 80 ÷ 4 sul tastierino: Spicci registra direttamente la tua quota di 20€ senza farti fare conti a mente alla cassa.',
+          'Conto da 80€ diviso tra 4 amici? Digiti 80 ÷ 4 sul tastierino: SpicciTrack registra direttamente la tua quota di 20€ senza farti fare conti a mente alla cassa.',
     ),
     _TutorialSlide(
       icon: Icons.pie_chart_rounded,
@@ -79,7 +79,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
       title: 'Budget Dinamico & Filtri',
       subtitle: 'Analisi visiva immediata',
       description:
-          'Spicci calcola quanto puoi spendere oggi. Con i due bottoni "Spese Fisse" e "Fuori Budget" (es. acquisto auto) puoi isolare o includere grandi spese senza alterare il tuo budget quotidiano!',
+          'SpicciTrack calcola quanto puoi spendere oggi. Con i due bottoni "Spese Fisse" e "Fuori Budget" (es. acquisto auto) puoi isolare o includere grandi spese senza alterare il tuo budget quotidiano!',
     ),
   ];
 

@@ -39,7 +39,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Questo importo serve a Spicci per calcolare quanto puoi spendere ogni giorno.',
+              'Questo importo serve a SpicciTrack per calcolare quanto puoi spendere ogni giorno.',
               style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
             ),
             const SizedBox(height: 16),
@@ -100,7 +100,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
 
     final now = DateTime.now();
-    final fileName = 'spicci_export_${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}.csv';
+    final fileName = 'spiccitrack_export_${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}.csv';
 
     final StringBuffer buffer = StringBuffer();
     buffer.writeln('ID;Data;Ora;Categoria;Tag;Importo;Fissa;FuoriBudget;Nota;DettaglioCalcolo');
@@ -619,7 +619,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   child: Icon(Icons.school_rounded, color: AppColors.purpleLight, size: 22),
                 ),
                 title: Text(
-                  'Tutorial & Guida di Spicci',
+                  'Tutorial & Guida di SpicciTrack',
                   style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                 ),
                 subtitle: Text(
@@ -721,7 +721,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                       style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.textPrimary),
                     ),
                     subtitle: Text(
-                      'Carica un file CSV di spese esportato da Spicci o Excel',
+                      'Carica un file CSV di spese esportato da SpicciTrack o Excel',
                       style: TextStyle(color: AppColors.textMuted, fontSize: 13),
                     ),
                     trailing: Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppColors.textMuted),
@@ -772,31 +772,42 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           const SizedBox(height: 28),
 
-          // Info App con moneta
+          // Info App con logo SpicciTrack
           Center(
             child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: AppColors.goldCoin.withValues(alpha: 0.15),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.goldCoin.withValues(alpha: 0.4),
-                      width: 1.5,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(22),
+                  child: Image.asset(
+                    'assets/images/spiccitrack_logo.jpg',
+                    width: 72,
+                    height: 72,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: AppColors.goldCoin.withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.goldCoin.withValues(alpha: 0.4),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Icon(Icons.monetization_on_rounded, color: AppColors.goldCoin, size: 30),
                     ),
                   ),
-                  child: Icon(Icons.monetization_on_rounded, color: AppColors.goldCoin, size: 30),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(
-                  'Spicci',
+                  'SpicciTrack',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
+                    letterSpacing: -0.3,
                     color: AppColors.textPrimary,
                   ),
                 ),
+                const SizedBox(height: 2),
                 Text(
                   'Segna le spese in un lampo • v1.0.0',
                   style: TextStyle(fontSize: 12, color: AppColors.textMuted),

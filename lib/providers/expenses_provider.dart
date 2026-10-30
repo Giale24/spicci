@@ -11,10 +11,18 @@ class ExpensesNotifier extends StateNotifier<AsyncValue<List<Expense>>> {
   Future<void> loadExpenses() async {
     try {
       final list = await AppDatabase.instance.getAllExpenses();
-      // Rimuove e pulisce automaticamente eventuali vecchie spese di prova
-      final cleanList = list.where((e) => !e.id.startsWith('sample-')).toList();
+      // Rimuove e pulisce automaticamente eventuali vecchie spese di prova o sample
+      final cleanList = list
+          .where((e) =>
+              !e.id.startsWith('sample-') &&
+              !e.id.startsWith('test-') &&
+              !e.id.startsWith('demo-'))
+          .toList();
       if (cleanList.length != list.length) {
-        for (final sample in list.where((e) => e.id.startsWith('sample-'))) {
+        for (final sample in list.where((e) =>
+            e.id.startsWith('sample-') ||
+            e.id.startsWith('test-') ||
+            e.id.startsWith('demo-'))) {
           await AppDatabase.instance.deleteExpense(sample.id);
         }
       }
@@ -66,10 +74,37 @@ class ExpensesNotifier extends StateNotifier<AsyncValue<List<Expense>>> {
   }
 
   Future<void> clearAllExpenses() async {
-    final currentList = state.value ?? [];
     state = const AsyncValue.data([]);
-    for (final exp in currentList) {
-      await AppDatabase.instance.deleteExpense(exp.id);
+    try {
+      await AppDatabase.instance.clearAllExpenses();
+    } catch (e) {
+      await loadExpenses();
+      rethrow;
+    }
+  }
+
+  Future<int> importExpenses(List<Expense> imported, {bool replaceAll = false}) async {
+    if (imported.isEmpty) return 0;
+    try {
+      if (replaceAll) {
+        final sorted = List<Expense>.from(imported)
+          ..sort((a, b) => b.date.compareTo(a.date));
+        state = AsyncValue.data(sorted);
+        await AppDatabase.instance.replaceAllExpenses(imported);
+      } else {
+        final currentList = state.value ?? [];
+        final Map<String, Expense> map = {for (var e in currentList) e.id: e};
+        for (var e in imported) {
+          map[e.id] = e;
+        }
+        final merged = map.values.toList()..sort((a, b) => b.date.compareTo(a.date));
+        state = AsyncValue.data(merged);
+        await AppDatabase.instance.insertExpensesBatch(imported);
+      }
+      return imported.length;
+    } catch (e) {
+      await loadExpenses();
+      rethrow;
     }
   }
 }

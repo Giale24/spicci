@@ -87,7 +87,10 @@ class AppDatabase {
       final rawList = prefs.getStringList('web_expenses') ?? [];
       final list = rawList
           .map((e) => Expense.fromMap(jsonDecode(e)))
-          .where((e) => !e.id.startsWith('sample-'))
+          .where((e) =>
+              !e.id.startsWith('sample-') &&
+              !e.id.startsWith('test-') &&
+              !e.id.startsWith('demo-'))
           .toList()
         ..sort((a, b) => b.date.compareTo(a.date));
       if (list.length != rawList.length) {
@@ -98,7 +101,8 @@ class AppDatabase {
     }
 
     final db = await database;
-    await db.delete('expenses', where: 'id LIKE ?', whereArgs: ['sample-%']);
+    await db.delete('expenses',
+        where: "id LIKE 'sample-%' OR id LIKE 'test-%' OR id LIKE 'demo-%'");
     final maps = await db.query('expenses', orderBy: 'date DESC');
     return maps.map((map) => Expense.fromMap(map)).toList();
   }
@@ -116,6 +120,63 @@ class AppDatabase {
     final db = await database;
     await db.insert('expenses', expense.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> insertExpensesBatch(List<Expense> expenses) async {
+    if (expenses.isEmpty) return;
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      final list = await getAllExpenses();
+      final Map<String, Expense> map = {for (var e in list) e.id: e};
+      for (var e in expenses) {
+        map[e.id] = e;
+      }
+      final merged = map.values.toList()..sort((a, b) => b.date.compareTo(a.date));
+      final rawList = merged.map((e) => jsonEncode(e.toMap())).toList();
+      await prefs.setStringList('web_expenses', rawList);
+      return;
+    }
+
+    final db = await database;
+    final batch = db.batch();
+    for (final exp in expenses) {
+      batch.insert('expenses', exp.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+    await batch.commit(noResult: true);
+  }
+
+  Future<void> replaceAllExpenses(List<Expense> expenses) async {
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      final sorted = List<Expense>.from(expenses)
+        ..sort((a, b) => b.date.compareTo(a.date));
+      final rawList = sorted.map((e) => jsonEncode(e.toMap())).toList();
+      await prefs.setStringList('web_expenses', rawList);
+      return;
+    }
+
+    final db = await database;
+    await db.transaction((txn) async {
+      await txn.delete('expenses');
+      final batch = txn.batch();
+      for (final exp in expenses) {
+        batch.insert('expenses', exp.toMap(),
+            conflictAlgorithm: ConflictAlgorithm.replace);
+      }
+      await batch.commit(noResult: true);
+    });
+  }
+
+  Future<void> clearAllExpenses() async {
+    if (kIsWeb) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('web_expenses');
+      return;
+    }
+
+    final db = await database;
+    await db.delete('expenses');
   }
 
   Future<void> deleteExpense(String id) async {

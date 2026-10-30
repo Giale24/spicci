@@ -111,8 +111,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       final timeStr =
           '${e.date.hour.toString().padLeft(2, '0')}:${e.date.minute.toString().padLeft(2, '0')}';
       final catName = Category.byId(e.categoryId).name;
+      final safeTag = (e.tag ?? '').replaceAll('"', '""');
+      final safeNote = (e.note ?? '').replaceAll('"', '""');
+      final safeCalc = (e.calculationNote ?? '').replaceAll('"', '""');
       buffer.writeln(
-          '${e.id};$dateStr;$timeStr;$catName;${e.tag ?? ""};${e.amount.toStringAsFixed(2)};${e.isFixed ? "SI" : "NO"};${e.isExtraordinary ? "SI" : "NO"};"${e.note ?? ""}";"${e.calculationNote ?? ""}');
+          '${e.id};$dateStr;$timeStr;$catName;"$safeTag";${e.amount.toStringAsFixed(2)};${e.isFixed ? "SI" : "NO"};${e.isExtraordinary ? "SI" : "NO"};"$safeNote";"$safeCalc"');
     }
 
     final csvText = buffer.toString();

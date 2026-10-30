@@ -29,7 +29,7 @@ Future<String?> saveCsvFile(String content, String fileName) async {
     targetDir ??= await getApplicationDocumentsDirectory();
 
     final file = File('${targetDir.path}/$fileName');
-    await file.writeAsBytes(bytes);
+    await file.writeAsBytes(bytes, flush: true);
     return file.path;
   } catch (e) {
     debugPrint('Errore durante il salvataggio CSV: $e');

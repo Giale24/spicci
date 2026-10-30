@@ -1,14 +1,12 @@
-import 'dart:convert';
 import 'dart:js_interop';
-import 'dart:typed_data';
 import 'package:web/web.dart' as web;
 
 Future<String?> saveCsvFile(String content, String fileName) async {
   try {
-    // BOM UTF-8 (\uFEFF) per corretta interpretazione di caratteri accentati ed euro in Excel
-    final bytes = Uint8List.fromList([0xEF, 0xBB, 0xBF, ...utf8.encode(content)]);
+    // Includiamo BOM UTF-8 (\uFEFF) per garantire perfetta apertura in Excel
+    final fullText = '\uFEFF$content';
     final blob = web.Blob(
-      [bytes.toJS].toJS,
+      [fullText.toJS].toJS,
       web.BlobPropertyBag(type: 'text/csv;charset=utf-8;'),
     );
     final url = web.URL.createObjectURL(blob);
@@ -19,7 +17,13 @@ Future<String?> saveCsvFile(String content, String fileName) async {
     web.document.body?.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    web.URL.revokeObjectURL(url);
+
+    // RITARDO FONDAMENTALE: Non revocare l'URL del blob immediatamente!
+    // Se revocato subito, il browser interrompe lo stream di download troncando il file.
+    Future.delayed(const Duration(seconds: 30), () {
+      web.URL.revokeObjectURL(url);
+    });
+
     return fileName;
   } catch (e) {
     return null;

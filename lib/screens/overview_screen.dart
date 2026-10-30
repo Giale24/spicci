@@ -27,28 +27,38 @@ class _OverviewScreenState extends ConsumerState<OverviewScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            // Icona della moneta richiesta al posto del fulmine
+            // Logo icona SpicciTrack
             Container(
-              padding: const EdgeInsets.all(7),
               decoration: BoxDecoration(
-                color: AppColors.goldCoin.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.goldCoin.withValues(alpha: 0.5),
-                  width: 1.5,
-                ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.goldCoin.withValues(alpha: 0.2),
+                    color: AppColors.purple.withValues(alpha: 0.35),
                     blurRadius: 8,
                     spreadRadius: 1,
                   ),
                 ],
               ),
-              child: Icon(
-                Icons.monetization_on_rounded,
-                color: AppColors.goldCoin,
-                size: 20,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  'assets/images/spiccitrack_logo.jpg',
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: AppColors.goldCoin.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.monetization_on_rounded,
+                      color: AppColors.goldCoin,
+                      size: 20,
+                    ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 10),

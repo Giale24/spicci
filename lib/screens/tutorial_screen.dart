@@ -148,7 +148,19 @@ class _TutorialScreenState extends State<TutorialScreen> {
                               ),
                             ],
                           ),
-                          child: Icon(slide.icon, size: 52, color: slide.iconColor),
+                          child: index == 0
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Image.asset(
+                                    'assets/images/spiccitrack_logo.jpg',
+                                    width: 76,
+                                    height: 76,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) =>
+                                        Icon(slide.icon, size: 52, color: slide.iconColor),
+                                  ),
+                                )
+                              : Icon(slide.icon, size: 52, color: slide.iconColor),
                         ),
                         const SizedBox(height: 32),
                         Text(

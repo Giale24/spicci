@@ -181,9 +181,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             ),
             onPressed: () async {
               Navigator.pop(dialogContext);
+              final messenger = ScaffoldMessenger.of(context);
               final result = await saveCsvFile(csvText, fileName);
-              if (result != null && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
+              if (result != null) {
+                messenger.showSnackBar(
                   SnackBar(
                     content: Row(
                       children: [
@@ -192,6 +193,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         Text('File scaricato: $fileName'),
                       ],
                     ),
+                    duration: const Duration(seconds: 3),
+                  ),
+                );
+              } else {
+                messenger.showSnackBar(
+                  const SnackBar(
+                    content: Text('Operazione annullata o non riuscita.'),
                   ),
                 );
               }
